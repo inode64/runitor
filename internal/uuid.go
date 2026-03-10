@@ -9,12 +9,9 @@ import (
 
 const uuid4RandBytes = 128 / 8
 
-func NewUUID4() (string, error) {
+func NewUUID4() string {
 	rnd := make([]byte, uuid4RandBytes)
-	_, err := rand.Read(rnd)
-	if err != nil {
-		return "", err
-	}
+	rand.Read(rnd)
 
 	rnd[6] = (rnd[6] & 0x0f) | 0x40 // version 4
 	rnd[8] = (rnd[8] & 0x3f) | 0x80 // variant 0b10
@@ -33,5 +30,5 @@ func NewUUID4() (string, error) {
 	str[23] = '-'
 	hex.Encode(str[24:], rnd[10:])
 
-	return string(str[:]), nil
+	return string(str[:])
 }

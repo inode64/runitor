@@ -335,10 +335,7 @@ func Run(cmd []string, cfg RunConfig, handle string, p Pinger) int {
 	)
 
 	if !cfg.NoRunId {
-		params.RunId, err = NewUUID4()
-		if err != nil {
-			panic("XXX")
-		}
+		params.RunId = NewUUID4()
 	}
 
 	if cfg.Create {
