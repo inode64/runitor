@@ -49,11 +49,7 @@ var (
 // http.DefaultTransport with a TLS Client Session Cache, to enable TLS session
 // resumption.
 func NewDefaultTransportWithResumption() *http.Transport {
-	t, ok := http.DefaultTransport.(*http.Transport)
-	if !ok {
-		panic("cannot assert DefaultTranport to *Transport")
-	}
-
+	t := http.DefaultTransport.(*http.Transport).Clone()
 	t.TLSClientConfig = &tls.Config{
 		ClientSessionCache: tls.NewLRUClientSessionCache(1),
 	}
