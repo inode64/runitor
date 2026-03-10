@@ -268,7 +268,7 @@ func (c *APIClient) ping(handle string, params PingParams, typePath string, body
 	if len(params.RunId) > 0 {
 		q.Add("rid", params.RunId)
 	}
-	if params.Create == true {
+	if params.Create {
 		q.Add("create", "1")
 	}
 
