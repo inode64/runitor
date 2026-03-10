@@ -21,6 +21,7 @@ type RingBuffer struct {
 	buf         []byte
 	idx         int
 	idxAtClose  int
+	written     int
 	unread      int
 	writeClosed bool
 }
@@ -69,9 +70,14 @@ func (r *RingBuffer) Cap() int {
 	return cap(r.buf)
 }
 
+// Written return the number of bytes written to ring buffer.
+func (r *RingBuffer) Written() int {
+	return r.written
+}
+
 // Wrapped returns true if the ring buffer overwrote at least one byte.
 func (r *RingBuffer) Wrapped() bool {
-	return r.Len() == r.Cap() && r.idx > 0
+	return r.written > r.Cap()
 }
 
 func (r *RingBuffer) Write(p []byte) (n int, err error) {
@@ -104,6 +110,8 @@ func (r *RingBuffer) write(p []byte) (n int) {
 		n += cn
 		r.idx = (r.idx + cn) % r.Cap()
 	}
+
+	r.written += n
 
 	return
 }

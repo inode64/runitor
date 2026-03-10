@@ -418,7 +418,13 @@ func Run(cmd []string, cfg RunConfig, handle string, p Pinger) int {
 		body = bytes.NewReader(b.Bytes())
 	case *RingBuffer:
 		if b.Wrapped() {
-			fmt.Fprintf(bw, "\n[%s] Output truncated to last %d bytes.", Name, b.Cap())
+			written := toSI(b.Written())
+			retained := toSI(b.Cap())
+			fmt.Fprintf(bw, "\n[%s] Output truncated from %s to last %s bytes.", Name, written, retained)
+			// We write the truncation warning to ring buffer as
+			// well. It generally costs about 60 bytes. It's not
+			// strictly accurate to say contents above this message
+			// are the last N bytes.
 		}
 		body = b
 	default:
@@ -480,4 +486,20 @@ func Exec(cmd []string, stdout, stderr io.Writer) (exitCode int, err error) {
 	}
 
 	return
+}
+
+func toSI(n int) string {
+	units := []string{"", "K", "M"}
+	val := float64(n)
+	i := 0
+
+	for val >= 1e3 && i < len(units)-1 {
+		val /= 1e3
+		i++
+	}
+
+	s := fmt.Sprintf("%.2f", val)
+	s = strings.TrimRight(strings.TrimRight(s, "0"), ".")
+
+	return s + units[i]
 }
