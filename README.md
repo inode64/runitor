@@ -64,7 +64,7 @@ start investigating the issue with the relevant context already available.
 It can be used as a long running process acting as a task scheduler, executing
 the command at specified intervals. This feature comes in handy when you don't
 readily have access to a job scheduler like crond or systemd.timer. Works well
-in one process per container environments.
+in one process per container environments or [on robot vacuums](https://blog.healthchecks.io/2026/03/monitoring-a-roborock-robot-vacuum-with-healthchecks-io/).
 
 
 ## Example Uses
